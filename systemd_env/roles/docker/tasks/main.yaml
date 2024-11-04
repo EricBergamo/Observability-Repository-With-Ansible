@@ -1,0 +1,10 @@
+---
+- name: Download docker from shell
+  ansible.builtin.uri:
+    url: https://get.docker.com/
+    dest: /tmp/get-docker.sh
+    mode: '+x'
+
+- name: Start Shell
+  ansible.builtin.shell: sh /tmp/get-docker.sh
+...

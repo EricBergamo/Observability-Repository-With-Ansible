@@ -1,0 +1,44 @@
+---
+- name: Deploy node exporter, grafana and prometheus
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Node exporter container
+      docker_container:
+        name: node_exporter
+        image: prom/node-exporter:latest
+        state: started
+        restart_policy: on-failure
+        ports:
+          - "9100:9100"
+
+    - name: create prometheus directory config
+      ansible.builtin.file:
+        path: /etc/prometheus
+        state: directory
+
+    - name: Render prometheus config template
+      ansible.builtin.template:
+        src: templates/prometheus.yaml.j2
+        dest: /etc/prometheus/prometheus.yaml 
+
+    - name: Prometheus container
+      docker_container:
+        name: prometheus
+        image: prom/prometheus:latest
+        state: started
+        restart_policy: on-failure
+        ports:
+          - "9090:9090"
+        volumes: 
+          - "/etc/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml"
+
+    - name: Grafana container
+      docker_container:
+        name: grafana
+        image: grafana/grafana:latest
+        state: started
+        restart_policy: on-failure
+        ports:
+          - "3000:3000"
+...

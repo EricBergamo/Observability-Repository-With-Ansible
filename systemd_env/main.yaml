@@ -1,0 +1,9 @@
+---
+- name: Deploy observabillity 
+  hosts: localhost
+  gather_facts: true
+  become: yes
+  roles:
+    #- role: prometheus.prometheus.node_exporter 
+    - role: grafana  
+...
