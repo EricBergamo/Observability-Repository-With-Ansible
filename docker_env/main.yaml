@@ -41,4 +41,6 @@
         restart_policy: on-failure
         ports:
           - "3000:3000"
+        volumes:
+          - "templates/grafana.ini:/etc/grafana/grafana.ini"
 ...
